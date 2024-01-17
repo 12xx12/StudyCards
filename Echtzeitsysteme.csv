@@ -1,0 +1,365 @@
+a_i,Arrival/Release time
+Average Response time,
+C_i,Computation time
+D_i,Relative deadline
+d_i,Absolute deadline
+f_i,Finishing time
+Feasible schedule,all tasks in the schedule complete before their deadline: ∀i Ri ≤ Di
+Maximum lateness,
+Maximum number of late tasks,mit miss = 0 wenn rechtzeitig. Sonst 1
+Offline Scheduling,"Scheduling decisions taken offline
+
+before execution"
+Online Scheduling,"Scheduling decisions taken online
+
+during Execution"
+R_i,Response time
+s_i,Start time
+Schedulability Test,Checks if a task set is schedulable with a given algorithm
+Schedulable task-set,∃ scheduling algorithm which produces a feasible schedule
+Schedule,"Zuweisung Task -> Prozeesor
+Alle tasks laufen bis zum Ende"
+Scheduling Algorithm,"Satz von Regeln, um die Reihenfolge der auszuführenden Aufgaben zu bestimmen"
+Scheduling Policy,"Kriterium, um zu entscheiden, welche Aufgabe ausgeführt werden soll"
+Total completion time,Spätester Abschluss mit erster Anfang
+Unterschied absolute vs relative Deadline,"Relativ: gegen a_i
+Absolut: gegen 0"
+Vor/Nachteile Offline Scheduling,"- Inflexible, but very predictable 
+- Offline computation → online table"
+Vor/Nachteile Online Scheduling,"- Flexible
+- Less predictable
+- Online algorithm → higher runtime overhead"
+Was sind hier die precedence constraints,"Erst J_1 dann J_2 und J_3
+
+Nach J_2 dann J4
+Nach J_2 und J_3 dann J_5"
+Weighted sum of completion times,
+Wie berechne ich L_i,L_i = f_i - d_i
+Wie berechne ich R_i,R_i = f_i - a_i
+Aperiodic Scheduling with asynchronous Release Times,"- Tasks are executed once (job scheduling) 
+- Tasks are released at arbitrary times
+- No task dependencies or resource sharing 
+- Single processor
+- Non-preemptive
+- Problem is NP-Hard → No optimal online algorithm"
+Bratley’s Algorithm,"Branch-and-Bound algorithm:
+- Start with an empty schedule 
+- Add task to schedule
+- If deadline miss → abandon branch 
+- If all tasks scheduled → stop search
+
+*!!* Immer ganzen Baum aufzeichnen *!!*
+
+- Efficient in the average, exponential in the worst-case"
+EDD Schedulability-Test,"Tasks sind mit ihrem Index abhängig von der Deadline sortiert
+i < j: di ≤ dj
+
+Finishing time: f_i=∑_k=1^i C_k
+
+Schedulable if:∀i:f_i≤d_i
+
+Also alle tasks mit niedrigerem index und der Task selber ausgeführt werden kann"
+Geht auch nicht-präemptives EDF,"Nein, da es keinen Algorithmus gibt, der mit unbekanntenarrival Times feststellen kann, ob er Ideln soll"
+Horn’s Rule,"Gegeben:
+- Gegebene Menge von n unabhängigen Aufgaben
+- Beliebige Ankunftszeiten
+Algorithmus is optimal, wenn
+- Führt ständig die Aufgabe mit der frühesten absoluten Deadline aus
+—> Minimiert die maximale Lateness (L_max)"
+Jackson’s Rule,"Tasks in der Reihenfolge ihrer absoluten deadlines ist optimal in Bezug auf der maximum Lateness
+
+deadline kleiner -> frühere Ausführung"
+Summary Aperiodic Scheduling,"| | synchronous | asynchronous preemptive | aynchronous non-preemptive |
+| --- | --- | --- | --- |
+| independent | **EDD** O(n logn) | **EDF** O(n2) | **Tree Search** |
+| precedence constrains | **LDF** O(n2) | **EDF\* ** O(n2) | **Tree Search** O(nn!) |"
+Was ist EDD,"- Earliset Deadline Due
+- Der task mit der geringsten absoluten Deadline wird als erstes ausgeführt"
+Was ist EDF,"- Earlistest Deadline First
+- Führt immer den Task mit der Frühesten absoluten Deadline aus
+- preemptive"
+Was ist EDF* und wie funktioniert es?,"- Earlist deadline First
+
+Taskset so umbauen, dass precedence constraints in den Deadlines berücksichtigt werden und dann EDF schedulen
+
+## Algorythmus
+a muss vor b ablaufen
+r_b’ = max(r_b, r_a + C_a)
+
+d_b’ = min(d_a, d_b - C_b)
+
+### Teilschritt release times
+
+1. for any initial node of the graph, set r’_i = r_i
+2. Select task J_i such that: r_I not modified, but all predecessors have been modified
+- If no such task exist, finish
+- r_i' = max(r_i ,max (pred_J_h(r_h'+C_h))
+3. Return to 2.
+
+### Teilschritt Deadlines
+
+1. For any terminal node of the graph, set d’_i = d_i
+2. Select task J_i such that: d_I not modified, but all immediate successors have been modified
+- If no such task exist, finish.
+- Set d_i '=min(d_i ,min(suc J_h(d_h−C_h))
+3. Return to 2"
+Wie schedule ich aperiodisch mit precedence Constraints,"- Latest Deadline First
+
+## Algorithm
+- Chose sink-node J_i with latest deadline
+- Schedule J_i last
+- Remove J_i from Graph 
+- von vorne"
+Arbitrary Deadlines,tasks deadlines may be later than next task release
+Constrained Deadlines,"some tasks must finish an arbitrary time before its next release
+
+D_i ≤ T_i"
+"d_i,k","- Relative Deadline
+- So for each instance
+
+d_ik = r_ik + D_i"
+"f_i,k","Finishing time of job τ_i,k"
+Hyperperiod,"H = lcm(T_1,…T_n)
+
+- High for arbitrary periods 
+- Low for harmonic periods
+	∀i, j:Ti/T j∈N∨T j/Ti∈N"
+Implicit Deadlines,"each task must finish before its next release
+
+D_i = T_i"
+Job schedulable,"if R_i,k ≤ D_i"
+O_i,"Offset
+
+O_i = r_i,1"
+Periodic,"task releases are periodic with a jitter Ji
+
+ r_i,k+1 = r_i,k + T_i + [-J_i:J_i]"
+Processor Utilization,"Metric for how much the processor is utilized by a task or task set
+
+U_i = C_i / T_i
+
+U=∑_i=1^n U_i=∑_i=1^n C_i/T_i
+
+If U > 1 —> not schedulable"
+Proportional Share Algorithm,"- Divide timeline into slots of equal length
+- Assign each task a share of each slot
+- Share of τi proportional to Ui
+- Slot length: Ls = gcd(T1,...,Tn)
+
+**G**reatest **C**ommon **D**ivider"
+R_i,"Response time of task τ_i
+
+R_i = max_k(R_i,k)"
+"R_i,k","Response time of job τ_i,k
+
+R_i,k = f_i,k – r_i,k"
+"s_i,k","Start time of job τ_i,k "
+Schedulability Test via Processor Utilization,"### Find for each task set Γ with upper bound Utilization U_ub(Γ,A):
+- Γ is schedulable with algorithm A
+- Any increase in U_Γ (increase C or decrease T)
+→ Taskset becomes unschedulable
+- Find task set Γ with least upper bound on processor utilization:
+	U_lub(A) = min_Γ (U_ub(Γ,A))
+### Scheduling test:
+- If U ≤ Ulub(A) → Γ is schedulable with algorithm A 
+- If U > 1 → Γ is not schedulable
+- If U > Ulub(A) → We do not know"
+Sporadic,"- task releases are sporadic
+- but with minimal interarrival time (-> Period is minimum time between tasks)
+r_ i,k+1 ≥ r_i,k +  T_i"
+Strictly Periodic,"task releases are exactly periodic
+
+r_i,k+1 = r_i,k + T_i"
+T_i,"Period
+
+T_i = r_i,j+1 - r_i,j
+
+Zeit zwischen release times"
+Task schedulable,R_i ≤ D_i
+Task vs. Job Relation,A Job os a instance of Task execution
+Critical Instace,Task activation scenario where the response time is maximum
+"DS
+(EDF Test)","DS={dk|d_k ≤ min(H,max(D_max,L*))}
+
+d_i,k = (k-1) T_i + D_i"
+EDF,More urgent deadline -> higher priority
+EDF schedulability Test,∀ t ∈ DS: dbf(t)≤t
+"L*
+(EDF Test)",L* = (∑_i=1^n (T_i − D_i) * U_i) / (U-1)
+Vorteile Dynamic priorities,"- better schedulability
+- Better reaction to deadline misses/overload situations
+- Fewer preemptions"
+Vorteile Static priorities,"- Better predictability
+- Lower implementation overhead"
+Deadline Monotonic,Niedriger ABSOLUTE Deadline -> Höhere Priorität
+Hyperbolic Bound Test,"Task set schedulable, if ∏_i=1^n(U_i+1)≤2
+
+n = Zahl Tasks"
+Level-i Active period,"Zeitintervall, in denen alle Jobs aktiv sind. Von beginn bis ende ist der Prozessor immer Ausgelastet
+
+## Länge:
+L_i^(h)=∑_h=1^i⌈ L_i(l−1) / T_h ⌉C_h
+_
+## Maximale Aktivierungen:
+
+l_i=⌈L_i / T_i ⌉
+_
+## Finishing Time
+
+### k=1
+f_i,k = C_i + ∑_{h<i} C_h
+
+### k > 1
+f_i,k(0)   = f_i,k-1 + C_i
+f_i,k(l+1) = kC_i + ∑_{h<i} ⌈f_i,k(l) / T_h ⌉ C_h
+
+
+## Response time berechnen
+
+R_i = max_{1≤k≤l_i} R_i,k = max_ {1≤k≤l_i}(f_i,k−(k-1)T_i)
+
+## Schedulability Test
+1. L_i berechnen
+2. l_i berechnen
+3. f_i,l berechnen 
+4. R_i berechnen"
+Rate Monotonic,Lower period -> Higher Priority
+Response Time Analysis (RTA),"R_i(0) = ∑_k=1^i C_k
+R_i(l) = C_ i + ∑_k=1^i-1 ⌈ R_i(l−1) / T_k⌉ C_k
+
+wenn zwei mal selber wert, beendet. Jedes mal Prüfen, ob nicht abgebrochen werden kann.
+
+task set schedulable if ∀_ R_i ≤ D_i"
+U_lub,"n (2^(1/n) - 1)
+
+n = Zahl Tasks
+für n -> unendlich => ln(2)"
+Delayed Task Execution,"Each task except for task with lowest priority may experience blocking delay:
+
+- IF C,T,B ∈ N: B_i=max{C_j−1}		j: P_j < P_i
+- IF C,T,B ∈ R: B_i=max {C_j}			j: P_j < P_i
+"
+Assumptions/Terminology,"m share ressources R_1,…,R_m
+distice Semaphores S_k with wait and signal
+
+z_i,k 	critical section task I and semaphore k
+Z_i,k	longest critical section
+δ_i,k	duration of Z_i,k
+
+σ_i		set of semaphores used by Task i
+γ_i		set of semaphores that can block Task i"
+"HLP
+Highest Locker Priority Protocol","- When entering: set to max priority of Task unsing the same ressource
+- When leaving: back to nominal
+
+γ_i = { Z_j,k | (P_j<P_i), C(R_k) ≥ P_i}
+
+Alle tasks mit kleinerer Priorität aber höherer Ceeling
+
+Blocking: Maximale zeit aus y, (-1 mit natürlichen Zahlen)"
+"NPP
+Non-Preemptive Protocol","When entering set priority of active task to maximum
+When leaving set to nominal priority
+
+γi={Zj,k|(Pj<Pi),(k=1,...,m)}
+
+B_i=max_ j,k { δ_j,k | Z_j , k∈γ_i} if R
+B_i=max_i,k { δ_j,k − 1 | Z_j , k∈γ_i }if N
+
+Längste verweilzeit"
+"PCP
+Priority Ceiling Protocol","beim eintritt: pj_(R_k) = max_ {P_j ,max { P_h | τ hisblockedon R_k}}
+
+γ_i = {Z_j,k | (P_j<P_i), C(R_k) ≥ P_i}
+Priorität kleiner aber Ceeling der Ressource geq
+
+B_i=max_ j,k { δ_j,k| Z_j, k∈γ_i} if R"
+priority ceiling,C(R_k)=max_h { P_h | τ_h uses R_k }
+Priority Inheritance Protocol (PIP),"# CAN DEADLOCK
+
+- On entering: p_j (R_k) = max { P_j, max_h { p_h | τ hisblockedon R_k}}
+- On leaving: 
+	either update to next blocing task priority
+	else nominal priority
+
+## Direct blocking
+geblockt durch Ressource mit niedriger priorität
+## Push-trough blocking
+geblockt durch task der höhere priorität geerbt hat
+
+B^l_i= ∑_ j: P_j < P_i max_k { δ_j,k | Z_j, k∈γ_i} if
+Summer über alle alle task, jeweils maximale zeit, die die von i genutzten Ressourcen genutzt werden **[jeweils -1 wenn N]**
+
+B_i^s = ∑_k=1^m max_j { δ_j,k | Z_j, k∈ γ_i} if R
+
+Summe über alle Ressource. Maximale zeit, die sie von jedem Task genutzt werden **[jeweils -1 wenn N]**
+
+B_i = min (B^l_i , B^s_i )"
+"SRP
+Stack Resource Protocol","C_Rk (n_k) = max_i { Π_i | μ_i(R_k)>n_k }
+
+γ_i = {Z_j,k | (Π_j<Π_i), C_Sk (0)≥Π_i}
+
+Blocking is das maximum von y_i "
+Allocation,"## No migration
+- Each task is allocated to a processor and no migration is permitted
+## Task-level migration
+- The jobs of a task may execute on different processors
+- however, each job can only execute on a single processor.
+
+## Job-level migration
+- A single job can migrate to and execute on different processors
+- however, parallel execution of a job is not permitted."
+Multiprocessor Classification,"## Heterogeneous
+- Processors are different
+- task execution rate depends on processor and task
+- Not all tasks may be able to execute on all processors.
+(Big/Little Design)
+## Homogeneous
+- processors are identical
+- execution rate of all tasks is the same on all processors.
+## Uniform
+- execution rate of a task depends only on the speed of the processor
+- A processor of speed 2 will execute all tasks at exactly twice as fast as processor of speed 1 (rarely used in practice)
+"
+P(roportional) FAIR Scheduling,"- Dynamic Job Priorities
+- Job-Level Migration
+-Not to be mistaken for completely fair scheduler (Linux Scheduler)
+## Idea
+- Divide timeline into quanta of equal length t
+- Assign within each quanta jobs such that accumulated processor time is [t*ui]"
+Utiliazation Bounds,"Dynamic Job Priorities, Job-Level Migration: m
+
+All others: (m+1)/2"
+Advantages / Disadvantages Ethernet,"## Disadvantages of Ethernet
+- Non determinism
+- No real-time guarantess
+- Full OSI model
+- Overheads
+
+## Advantages
+- High troughput
+- Hardware available
+- Validated and tested"
+Credit base shaper,"- Jeder client hat ""credit“ mit der er sendezeit bezahlt
+- Für warten gibt es credits
+- Für senden werden abgezogen
+- credit hat over (high) und untere grenze"
+Delay Times in PTP,"### Delay to transmit a frame?
+Delay=((t 2−t_1)+(t_4−t_3))/2
+
+### Clock offset of slave?
+((t_2−t_1)−(t_4−t_3))/2
+
+t_1 sendezeit
+t_2 Empfangszeit
+t_3 Sendezeit2
+t_4 Ankunftszeit Antwort"
+TAS,"- Basiert auf mehreren Prioritäten
+- Nur eine kann senden"
+TAS Transmission Time,"Time to transmit message over link:
+
+c_i= (42b+Payload_L) /  r_link
+
+r_link = link transmission speed 
+Payload_L = size of payload (in bytes)"
