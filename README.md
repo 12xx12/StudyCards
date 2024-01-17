@@ -26,7 +26,7 @@ editing.
 
 ## App
 
-I use [StudyCards][StudyCards]. Github Copilot suggested [AnkiDroid][AnkiDroid].
+I use [StudyCards][StudyCards]. GitHub Copilot suggested [AnkiDroid][AnkiDroid].
 
-[StudyCards]: (https://apps.apple.com/de/app/studycards-karteikarten/id1534325530)
-[AnkiDroid]: (https://play.google.com/store/apps/details?id=com.ichi2.anki)
+[StudyCards]: https://apps.apple.com/de/app/studycards-karteikarten/id1534325530
+[AnkiDroid]: https://play.google.com/store/apps/details?id=com.ichi2.anki
