@@ -18,3 +18,15 @@ For more information check the [Lectures File](LECTURES.md).
 
 The math based cards contain Latex code. The Code isn't rendered by the app I
 use. This might seem unreadable. SORRY
+
+## Editor
+
+I use [Writerside](https://www.jetbrains.com/de-de/writerside/) for Markdown
+editing.
+
+## App
+
+I use [StudyCards][StudyCards]. Github Copilot suggested [AnkiDroid][AnkiDroid].
+
+[StudyCards]: (https://apps.apple.com/de/app/studycards-karteikarten/id1534325530)
+[AnkiDroid]: (https://play.google.com/store/apps/details?id=com.ichi2.anki)
