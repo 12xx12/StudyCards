@@ -254,7 +254,7 @@ Highest Locker Priority Protocol","- When entering: set to max priority of Task 
 
 γ_i = { Z_j,k | (P_j<P_i), C(R_k) ≥ P_i}
 
-Alle tasks mit kleinerer Priorität aber höherer Ceeling
+Alle tasks mit kleinerer Priorität und höherer Ceeling als selber
 
 Blocking: Maximale zeit aus y, (-1 mit natürlichen Zahlen)"
 "NPP
@@ -310,6 +310,9 @@ Allocation,"## No migration
 ## Job-level migration
 - A single job can migrate to and execute on different processors
 - however, parallel execution of a job is not permitted."
+Dhaal Effect,"Viele kleine Task und einer mit U > 1/2 
+
+-> Task set wird unschedulable"
 Multiprocessor Classification,"## Heterogeneous
 - Processors are different
 - task execution rate depends on processor and task
@@ -331,6 +334,70 @@ P(roportional) FAIR Scheduling,"- Dynamic Job Priorities
 Utiliazation Bounds,"Dynamic Job Priorities, Job-Level Migration: m
 
 All others: (m+1)/2"
+Density,"C_i / min(T_i, D_i)
+
+wie bei utiliazation aber nicht mit T_i"
+EDF (k),K-1 tasks mit u>1/2 werden FP gescheduled
+EDF (k) Limit,"m >= (k-1) + \lceil U(restliche Tasks) / 1 - u_k
+
+K-1 Cores komplett Voll.
+Der letzte muss k + den rest schaffen"
+fpEDF,m-1 tasks mit U > 1/2 höchste Prio
+fpEDF Limit?,U <= (m+1) / 2
+Global EDF,"U_sum <= m - (m-1) * U_max
+
+U_sum -> alle
+U_max -> einer"
+Global RM Limit,U_sum <= m/2 * (1-U_max) + U_max
+Job-Level-Migration,"Job kann nach präemption auf anderem Core laufen
+"
+No Task migration,Tasks immer auf selbem Core
+RM-US,"Schedule m-1 tasks und u > x mit höchster prio 
+rest mit RM"
+RM-US Limit,"RM-US(m^2 / (3m - 2) -> > m^2 / 3m-2
+RM-US(1/3) -> 1/3
+RM-US(2/3 + 5^(1/2) -> (2m)/(3+5^(1/2)"
+Task-Level-Migration,"Jeder Job kann auf anderem Core sein
+"
+Admission Criteria,"D_i - \sum_all-tasks-an-processor RBF*(\theta_i, D) >= C_i"
+Best Fit,minimum übrige Kapazität
+First Fit,Da wo als erstes platz ist
+Request Bound function,"RBF(theta_i, t) = \lceil t / ( T_i) \rceil C_i"
+WF Worst Fit,maximum remaining capacity
+CSMA / CR,"- Carrier Sense Multiple Access / Collision Resolution
+- Priority Based
+- Online Schedule -> Flexible"
+TDMA	,"- time-triggerd
+- predictable
+- highest testability
+"
+Arbitration mechanism,"- prioritäten
+- jeder schreibt seine Prio auf den bus
+- der dessen Priorität am ende auf dem bus ist, ist drann
+- dadurch wie der bus handelt, kann nur eine Priorität da stehen
+
+z.B.
+
+000 -> 000 ✔
+001 -> 000 ✔"
+Bit Stuffing,"Fest vergebene Muster in nachrichten vermeiden, indem extra 0 oder 1 angehängt wird, bis keine verbotene Reihenfolge enthalten sind"
+Can Timing,"B_i = max C_k
+
+L_i = B_i + \sum_j-teilnehmer-heq(p) \lceil (L_i + J_i) / T_i \rceil * C_j
+
+l = \lceil (L_i + J_i) / T_i \rceil
+
+I_i,q = B_i + (q-1) * C_i + \sum_j-hp(i) \lceil (I_i,q + bit-zeit + J_i) / T_j \rceil * C_j
+
+R_i,q = J_i ü I_iq + C_i - (q-1) * T_i"
+Message Format,"47 bit Header + 0-64 Bit Data
+
+- Start 
+- Frame Id
+- CRC
+- Ack
+- EOF
+- Pause"
 Advantages / Disadvantages Ethernet,"## Disadvantages of Ethernet
 - Non determinism
 - No real-time guarantess
